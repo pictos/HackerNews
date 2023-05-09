@@ -6,7 +6,7 @@ class TextAnalysisService
 {
 	readonly TextAnalyticsClient _textAnalyticsApiClient;
 
-	static bool _isApiKeyValid = true;
+	static bool _isApiKeyValid = false;
 
 	public TextAnalysisService(TextAnalyticsClient textAnalyticsClient) => _textAnalyticsApiClient = textAnalyticsClient;
 

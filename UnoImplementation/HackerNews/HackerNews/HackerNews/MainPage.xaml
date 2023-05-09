@@ -9,6 +9,20 @@
 	mc:Ignorable="d">
 
 	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-		<TextBlock Text="Hello Uno Platform" />
+
+		<ProgressRing
+			Width="50"
+			Height="50"
+			Margin="0,0,0,20"
+			Foreground="Red"
+			IsActive="{Binding RefreshCommand.IsRunning}" />
+
+		<ListView ItemsSource="{Binding TopStoryCollection}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Title}" />
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 	</StackPanel>
 </Page>

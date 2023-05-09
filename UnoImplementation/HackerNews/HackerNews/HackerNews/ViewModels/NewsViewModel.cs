@@ -58,13 +58,13 @@ partial class NewsViewModel : BaseViewModel
 
 		try
 		{
-			await foreach (var story in GetTopStories(StoriesConstants.NumberOfStories).ConfigureAwait(false))
+			await foreach (var story in GetTopStories(StoriesConstants.NumberOfStories))
 			{
 				StoryModel? updatedStory = null;
 
 				try
 				{
-					updatedStory = story with { TitleSentiment = await _textAnalysisService.GetSentiment(story.Title).ConfigureAwait(false) };
+					updatedStory = story with { TitleSentiment = await _textAnalysisService.GetSentiment(story.Title)};
 				}
 				catch (Exception)
 				{

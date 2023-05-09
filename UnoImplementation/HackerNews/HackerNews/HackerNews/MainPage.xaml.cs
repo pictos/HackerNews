@@ -5,6 +5,10 @@ namespace HackerNews;
 
 public sealed partial class MainPage : Page
 {
+
+	NewsViewModel Vm => (NewsViewModel)DataContext;
+
+
 	public MainPage()
 	{
 		this.InitializeComponent();
@@ -20,5 +24,13 @@ public sealed partial class MainPage : Page
 		var hackerApis = new HackerNewsAPIService(refitBla);
 
 		DataContext = new NewsViewModel(new TextAnalysisService(textClient), hackerApis);
+	}
+
+
+	protected override async void OnNavigatedTo(NavigationEventArgs e)
+	{
+		base.OnNavigatedTo(e);
+
+		await Vm.RefreshCommand.ExecuteAsync(null);
 	}
 }

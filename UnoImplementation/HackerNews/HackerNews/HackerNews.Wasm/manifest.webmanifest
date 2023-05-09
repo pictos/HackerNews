@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "HackerNews",
+  "display": "standalone",
+  "name": "HackerNews",
+  "short_name": "HackerNews",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}

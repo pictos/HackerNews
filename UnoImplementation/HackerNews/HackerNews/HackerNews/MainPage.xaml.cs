@@ -12,7 +12,20 @@ public sealed partial class MainPage : Page
 	public MainPage()
 	{
 		this.InitializeComponent();
+		DataContext = CreateVMAndResources();
+		this.listView.Tapped += (s,e ) => 
+		{
+			var list = (ListView)s;
+			var selectedItem = list.SelectedItem;
 
+			if (selectedItem is null)
+				return;
+		};
+	}
+
+
+	NewsViewModel CreateVMAndResources()
+	{
 		var textClient = new Azure.AI.TextAnalytics.TextAnalyticsClient(new(TextAnalysisConstants.BaseUrl), new AzureKeyCredential(TextAnalysisConstants.SentimentKey));
 		var client = new HttpClient
 		{
@@ -22,8 +35,8 @@ public sealed partial class MainPage : Page
 		var refitBla = RestService.For<IHackerNewsAPI>(client);
 
 		var hackerApis = new HackerNewsAPIService(refitBla);
-
-		DataContext = new NewsViewModel(new TextAnalysisService(textClient), hackerApis);
+		
+		return new NewsViewModel(new TextAnalysisService(textClient), hackerApis);
 	}
 
 

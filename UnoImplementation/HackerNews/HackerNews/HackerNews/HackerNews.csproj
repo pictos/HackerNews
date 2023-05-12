@@ -11,6 +11,7 @@
 		<PackageReference Include="Azure.AI.TextAnalytics" Version="5.2.0" />
 		<PackageReference Include="Refit" Version="6.3.2" />
 		<PackageReference Include="Uno.WinUI" Version="4.8.33" />
+		<PackageReference Include="Uno.WinUI.Lottie" Version="4.6.19" />
 		<PackageReference Include="Uno.Resizetizer" Version="1.0.4" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />

@@ -4,6 +4,8 @@ public class App : Application
 {
 	public static Window? _window;
 
+	internal static SynchronizationContext? SynchronizationContext { get; private set; }
+
 	protected override void OnLaunched(LaunchActivatedEventArgs args)
 	{
 #if NET6_0_OR_GREATER && WINDOWS && !HAS_UNO
@@ -11,6 +13,7 @@ public class App : Application
 #else
 		_window = Microsoft.UI.Xaml.Window.Current;
 #endif
+		SynchronizationContext = SynchronizationContext.Current!;
 
 		// Do not repeat app initialization when the Window already has content,
 		// just ensure that the window is active

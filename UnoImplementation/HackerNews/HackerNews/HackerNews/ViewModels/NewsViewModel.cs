@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections;
-using System.Collections.ObjectModel;
+using HackerNews.Utils;
 
 namespace HackerNews;
 
@@ -19,64 +18,32 @@ partial class NewsViewModel : BaseViewModel
 	{
 		_textAnalysisService = textAnalysisService;
 		_hackerNewsAPIService = hackerNewsAPIService;
-
-		//Ensure Observable Collection is thread-safe https://codetraveler.io/2019/09/11/using-observablecollection-in-a-multi-threaded-xamarin-forms-application/
 	}
 
 	public event EventHandler<string>? PullToRefreshFailed;
 
-	public ObservableCollection<StoryModel> TopStoryCollection { get; } = new();
 
-	static void InsertIntoSortedCollection<T>(ObservableCollection<T> collection, Comparison<T> comparison, T modelToInsert)
-	{
-		if (collection.Count is 0)
-		{
-			collection.Add(modelToInsert);
-		}
-		else
-		{
-			int index = 0;
-			foreach (var model in collection)
-			{
-				if (comparison(model, modelToInsert) >= 0)
-				{
-					collection.Insert(index, modelToInsert);
-					return;
-				}
-
-				index++;
-			}
-
-			collection.Insert(index, modelToInsert);
-		}
-	}
+	[ObservableProperty]
+	List<StoryModel> topStoryCollection = new();
 
 	[RelayCommand]
 	async Task Refresh()
 	{
-		TopStoryCollection.Clear();
-
+		var hash = new HashSet<StoryModel>();
 		try
 		{
-			await foreach (var story in GetTopStories(StoriesConstants.NumberOfStories))
+			await foreach (var story in GetTopStories(StoriesConstants.NumberOfStories).ConfigureAwait(false))
 			{
 				StoryModel? updatedStory = null;
-
+				
 				try
 				{
 					updatedStory = story with { TitleSentiment = await _textAnalysisService.GetSentiment(story.Title)};
+					hash.Add(updatedStory);
 				}
 				catch (Exception)
 				{
-					//Todo Add TextAnalysis API Key in TextAnalysisConstants.cs
 					updatedStory = story;
-				}
-				finally
-				{
-					if (updatedStory is not null && !TopStoryCollection.Any(x => x.Title.Equals(updatedStory.Title, StringComparison.Ordinal)))
-					{
-						InsertIntoSortedCollection(TopStoryCollection, (a, b) => b.Score.CompareTo(a.Score), updatedStory);
-					}
 				}
 			}
 		}
@@ -86,6 +53,7 @@ partial class NewsViewModel : BaseViewModel
 		}
 		finally
 		{
+			ThreadHelpers.BeginInvokeOnMainThread(() => TopStoryCollection = new (hash));
 			IsListRefreshing = false;
 		}
 	}

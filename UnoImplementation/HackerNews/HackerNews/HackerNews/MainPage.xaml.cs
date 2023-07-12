@@ -44,6 +44,6 @@ public sealed partial class MainPage : Page
 	{
 		base.OnNavigatedTo(e);
 
-		await Vm.RefreshCommand.ExecuteAsync(null);
+		//await Vm.RefreshCommand.ExecuteAsync(null);
 	}
 }

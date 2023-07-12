@@ -12,4 +12,9 @@ namespace HackerNews.Droid;
 )]
 public class MainActivity : Microsoft.UI.Xaml.ApplicationActivity
 {
+	protected override void OnCreate(Bundle bundle)
+	{
+		base.OnCreate(bundle);
+		Android.FrameMetrics.FrameMetricsReporter.Initialize(this);
+	}
 }
